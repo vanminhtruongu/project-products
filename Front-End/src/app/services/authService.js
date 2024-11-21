@@ -1,6 +1,16 @@
 import { toast } from "react-toastify";
+import axios from 'axios';
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000/api';
+
+// Tạo instance axios với cấu hình mặc định
+const axiosInstance = axios.create({
+    baseURL: API_URL,
+    headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json',
+    }
+});
 
 const setCookie = (name, value, days = 7) => {
     const expires = new Date(Date.now() + days * 864e5).toUTCString();
@@ -26,61 +36,45 @@ export const authService = {
             password_confirmation: userData.password_confirmation
         };
 
-        const response = await fetch(`${API_URL}/register`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'Accept': 'application/json',
-            },
-            body: JSON.stringify(registerData),
-        });
-        
-        const data = await response.json();
-        
-        if (!response.ok) {
-            if (data.errors) {
-                const errorMessages = Object.values(data.errors).flat();
+        try {
+            const response = await axiosInstance.post('/register', registerData);
+            const data = response.data;
+            
+            if (data.access_token) {
+                setCookie('token', data.access_token);
+                setCookie('username', userData.name);
+                window.dispatchEvent(new Event('auth_change'));
+                toast.success("Đăng nhập thành công!");
+            }
+            
+            return data;
+        } catch (error) {
+            if (error.response?.data?.errors) {
+                const errorMessages = Object.values(error.response.data.errors).flat();
                 throw new Error(errorMessages.join('\n'));
             }
-            throw new Error(data.message || 'Đăng ký thất bại');
+            throw new Error(error.response?.data?.message || 'Đăng ký thất bại');
         }
-        
-        if (data.access_token) {
-            setCookie('token', data.access_token);
-            setCookie('username', userData.name);
-            window.dispatchEvent(new Event('auth_change'));
-            toast.success("Đăng nhập thành công!");
-        }
-        
-        return data;
     },
 
     async login(credentials) {
-        const response = await fetch(`${API_URL}/login`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'Accept': 'application/json',
-            },
-            body: JSON.stringify(credentials),
-        });
+        try {
+            const response = await axiosInstance.post('/login', credentials);
+            const data = response.data;
 
-        const data = await response.json();
-        
-        if (!response.ok) {
-            if (data.errors) {
-                const errorMessages = Object.values(data.errors).flat();
+            if (data.access_token) {
+                setCookie('token', data.access_token);
+                setCookie('username', credentials.email);
+                window.dispatchEvent(new Event('auth_change'));
+            }
+            return data;
+        } catch (error) {
+            if (error.response?.data?.errors) {
+                const errorMessages = Object.values(error.response.data.errors).flat();
                 throw new Error(errorMessages.join('\n'));
             }
-            throw new Error(data.message || 'Đăng nhập thất bại');
+            throw new Error(error.response?.data?.message || 'Đăng nhập thất bại');
         }
-
-        if (data.access_token) {
-            setCookie('token', data.access_token);
-            setCookie('username', credentials.email);
-            window.dispatchEvent(new Event('auth_change'));
-        }
-        return data;
     },
 
     async logout() {
@@ -90,30 +84,21 @@ export const authService = {
         try {
             const decodedToken = decodeURIComponent(token);
             
-            const response = await fetch(`${API_URL}/logout`, {
-                method: 'POST',
+            await axiosInstance.post('/logout', {}, {
                 headers: {
-                    'Authorization': `Bearer ${decodedToken}`,
-                    'Content-Type': 'application/json',
-                    'Accept': 'application/json',
+                    'Authorization': `Bearer ${decodedToken}`
                 },
-                credentials: 'include'
+                withCredentials: true
             });
             
             removeCookie('token');
             removeCookie('username');
             window.dispatchEvent(new Event('auth_change'));
-            
-            if (!response.ok) {
-                const data = await response.json();
-                throw new Error(data.message || 'Đăng xuất thất bại');
-            }
-            
             toast.success("Đăng xuất thành công!");
         } catch (error) {
             console.error('Logout error:', error);
-            if (!error.message.includes('Unauthorized')) {
-                toast.error(error.message || 'Có lỗi xảy ra khi đăng xuất');
+            if (!error.response?.data?.message?.includes('Unauthorized')) {
+                toast.error(error.response?.data?.message || 'Có lỗi xảy ra khi đăng xuất');
             }
         }
     },
@@ -125,33 +110,19 @@ export const authService = {
             return false;
         }
 
-        // Decode token
         const decodedToken = decodeURIComponent(token);
         console.log('Using decoded token:', decodedToken);
 
         try {
-            const response = await fetch(`${API_URL}/user/delete-account`, {
-                method: 'DELETE',
+            const response = await axiosInstance.delete('/user/delete-account', {
                 headers: {
-                    'Authorization': `Bearer ${decodedToken}`,
-                    'Content-Type': 'application/json',
-                    'Accept': 'application/json',
+                    'Authorization': `Bearer ${decodedToken}`
                 },
-                credentials: 'include'
+                withCredentials: true
             });
 
             console.log('Response status:', response.status);
-            
-            if (!response.ok) {
-                const data = await response.json();
-                console.log('Error response:', data);
-                throw new Error(data.message || 'Không thể xóa tài khoản');
-            }
-
-            const data = await response.json();
-            console.log('Success response:', data);
-
-            // Chỉ xóa cookies và dispatch event nếu thành công
+            console.log('Success response:', response.data);
             removeCookie('token');
             removeCookie('username');
             window.dispatchEvent(new Event('auth_change'));
@@ -159,7 +130,7 @@ export const authService = {
             return true;
         } catch (error) {
             console.error('Delete account error:', error);
-            toast.error(error.message || 'Có lỗi xảy ra khi xóa tài khoản');
+            toast.error(error.response?.data?.message || 'Có lỗi xảy ra khi xóa tài khoản');
             return false;
         }
     },

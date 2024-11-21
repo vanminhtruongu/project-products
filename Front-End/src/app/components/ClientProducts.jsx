@@ -3,10 +3,10 @@ import { useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import toast from 'react-hot-toast';
-import { addToCart } from '../services/cartService';
+import { addToCart } from '~/app/services/cartService';
 
 export default function ClientProducts({ initialProducts }) {
-  const [products] = useState(initialProducts);
+  const [ products ] = useState(initialProducts);
 
   const handleAddToCart = async (productId) => {
     try {
@@ -41,7 +41,6 @@ export default function ClientProducts({ initialProducts }) {
 
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <div className="max-w-7xl mx-auto">
-          {/* Header */}
           <div className="text-center mb-12">
             <h1 className="text-3xl font-bold text-gray-900 sm:text-4xl">Sản phẩm của chúng tôi</h1>
             <p className="mt-4 text-xl text-gray-500">
@@ -63,7 +62,7 @@ export default function ClientProducts({ initialProducts }) {
             <div className="grid grid-cols-1 gap-y-10 gap-x-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 xl:gap-x-8">
               {products.map((product) => (
                 <div key={product.id} className="group relative bg-white rounded-lg shadow-lg overflow-hidden hover:shadow-xl transition-shadow duration-300">
-                  {/* Product Image */}
+                  
                   <div className="aspect-w-1 aspect-h-1 w-full overflow-hidden rounded-t-lg bg-gray-200">
                     {product.image_url ? (
                       <Image

@@ -1,4 +1,15 @@
+import axios from 'axios';
+
 const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000/api';
+
+// Tạo instance axios với cấu hình mặc định
+const axiosInstance = axios.create({
+  baseURL: API_URL,
+  headers: {
+    'Content-Type': 'application/json',
+    'Accept': 'application/json',
+  }
+});
 
 const getCookie = (name) => {
   const value = `; ${document.cookie}`;
@@ -17,23 +28,17 @@ export const getOrderHistory = async () => {
       throw new Error('Vui lòng đăng nhập để xem lịch sử đơn hàng');
     }
 
-    const response = await fetch(`${API_URL}/orders`, {
+    const response = await axiosInstance.get('/orders', {
       headers: {
-        'Accept': 'application/json',
         'Authorization': `Bearer ${token}`
       },
-      credentials: 'include'
+      withCredentials: true
     });
 
-    const data = await response.json();
-    if (!response.ok) {
-      throw new Error(data.message || 'Có lỗi xảy ra khi lấy lịch sử đơn hàng');
-    }
-
     // Trả về trực tiếp data từ API
-    return data;
+    return response.data;
   } catch (error) {
     console.error('Error getting order history:', error);
-    throw error;
+    throw new Error(error.response?.data?.message || error.message || 'Có lỗi xảy ra khi lấy lịch sử đơn hàng');
   }
 };

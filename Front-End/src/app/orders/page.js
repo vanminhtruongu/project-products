@@ -26,6 +26,7 @@ export default function Orders() {
           console.log(`Order #${order.id} payment method:`, order.payment_method);
         });
         setOrders(data);
+        console.log("mẹ mày: "+JSON.stringify(orders));
       } else {
         console.error('Invalid orders data format:', data);
         setOrders([]);
@@ -155,6 +156,7 @@ export default function Orders() {
                     <div className="space-y-4">
                       {order.order_items.map((item) => (
                         <div key={item.id} className="flex items-center justify-between py-4 border-b border-gray-200 last:border-0">
+                          <img src={item.product.image_url} alt={item.product.name} className="w-20 h-16 object-cover rounded pr-[20px]" />
                           <div className="flex-1">
                             <h4 className="text-lg font-medium text-gray-900">{item.product.name}</h4>
                             <p className="mt-1 text-sm text-gray-500">

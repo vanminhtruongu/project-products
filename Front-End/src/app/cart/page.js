@@ -169,7 +169,7 @@ export default function Cart() {
                               type="checkbox"
                               checked={selectedItems.some(selectedItem => selectedItem.id === item.id)}
                               onChange={() => handleSelectItem(item)}
-                              className={`h-5 w-5 rounded border-gray-300 text-blue-600 focus:ring-blue-500 transition duration-200 ease-in-out transform hover:scale-110 hover:shadow-md ${selectedItems.some(selectedItem => selectedItem.id === item.id) ? 'opacity-100' : 'opacity-0 group-hover:opacity-100'}`}
+                              className={`h-5 w-5 cursor-pointer rounded border-gray-300 text-blue-600 focus:ring-blue-500 transition duration-200 ease-in-out transform hover:scale-110 hover:shadow-md ${selectedItems.some(selectedItem => selectedItem.id === item.id) ? 'opacity-100' : 'opacity-0 group-hover:opacity-100'}`}
                             />
                             <div>
                               <h3 className="text-lg font-medium text-gray-900">

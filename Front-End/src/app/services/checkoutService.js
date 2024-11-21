@@ -1,4 +1,15 @@
+import axios from 'axios';
+
 const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000/api';
+
+// Tạo instance axios với cấu hình mặc định
+const axiosInstance = axios.create({
+  baseURL: API_URL,
+  headers: {
+    'Content-Type': 'application/json',
+    'Accept': 'application/json',
+  }
+});
 
 const getCookie = (name) => {
   const value = `; ${document.cookie}`;
@@ -17,22 +28,14 @@ export const processCheckout = async (selectedItems) => {
       throw new Error('Vui lòng đăng nhập để thanh toán');
     }
 
-    const response = await fetch(`${API_URL}/checkout`, {
-      method: 'POST',
+    const response = await axiosInstance.post('/checkout', selectedItems, {
       headers: {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json',
         'Authorization': `Bearer ${token}`
       },
-      credentials: 'include',
-      body: JSON.stringify(selectedItems)
+      withCredentials: true
     });
 
-    const data = await response.json();
-
-    if (!response.ok) {
-      throw new Error(data.message || 'Có lỗi xảy ra khi thanh toán');
-    }
+    const data = response.data;
 
     // Kiểm tra response từ server
     if (data.status === 'error') {
@@ -46,6 +49,6 @@ export const processCheckout = async (selectedItems) => {
     };
   } catch (error) {
     console.error('Checkout error:', error);
-    throw error;
+    throw new Error(error.response?.data?.message || error.message || 'Có lỗi xảy ra khi thanh toán');
   }
 };
