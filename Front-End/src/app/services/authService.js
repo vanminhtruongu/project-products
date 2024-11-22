@@ -15,7 +15,15 @@ const axiosInstance = axios.create({
 
 const setCookie = (name, value, days = 7) => {
     const expires = new Date(Date.now() + days * 864e5).toUTCString();
-    document.cookie = name + '=' + encodeURIComponent(value) + '; expires=' + expires + '; path=/';
+    let cookieValue = value;
+    
+    // Nếu là username, không encode để tránh %40
+    if (name === 'username') {
+        document.cookie = name + '=' + cookieValue + '; expires=' + expires + '; path=/';
+    } else {
+        // Các cookie khác vẫn encode như bình thường
+        document.cookie = name + '=' + encodeURIComponent(cookieValue) + '; expires=' + expires + '; path=/';
+    }
 };
 
 const getCookie = (name) => {

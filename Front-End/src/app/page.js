@@ -4,70 +4,69 @@ import Image from 'next/image';
 
 export default function Home() {
   return (
-    <div className="min-h-screen bg-gray-50">
-      <section className="relative bg-white overflow-hidden">
-        <div className="max-w-7xl mx-auto py-16 px-4 sm:py-24 sm:px-6 lg:px-8">
+    <div className="min-h-screen bg-[url('/images/pattern-bg.png')] bg-fixed bg-cover bg-gray-900">
+      <div className="fixed inset-0 bg-gradient-to-br from-gray-900/90 via-purple-900/30 to-pink-900/50 pointer-events-none"></div>
+      
+      <section className="relative overflow-hidden">
+        <div className="max-w-7xl mx-auto py-16 px-4 sm:py-24 sm:px-6 lg:px-8 relative z-10">
           <div className="text-center">
-            <h1 className="text-4xl tracking-tight font-extrabold text-gray-900 sm:text-5xl md:text-6xl">
+            <h1 className="text-4xl tracking-tight font-extrabold sm:text-5xl md:text-6xl bg-gradient-to-r from-purple-300 via-pink-300 to-purple-300 text-transparent bg-clip-text animate-gradient">
               <span className="block">Chào mừng đến với</span>
-              <span className="block text-indigo-600">Thế Giới Mua Sắm Online</span>
+              <span className="block bg-gradient-to-r from-indigo-300 to-purple-300 text-transparent bg-clip-text">Thế Giới Mua Sắm Online</span>
             </h1>
-            <p className="mt-3 max-w-md mx-auto text-base text-gray-500 sm:text-lg md:mt-5 md:text-xl md:max-w-3xl">
+            <p className="mt-3 max-w-md mx-auto text-base text-gray-300 sm:text-lg md:mt-5 md:text-xl md:max-w-3xl">
               Khám phá hàng nghìn sản phẩm chất lượng với giá cả cạnh tranh nhất thị trường
             </p>
           </div>
         </div>
       </section>
 
-      {/* Features Section */}
-      <section className="py-12 bg-white">
+      <section className="py-12 relative z-10">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="lg:text-center">
-            <h2 className="text-3xl font-extrabold tracking-tight text-gray-900 sm:text-4xl">
+            <h2 className="text-3xl font-extrabold tracking-tight sm:text-4xl bg-gradient-to-r from-purple-300 via-pink-300 to-purple-300 text-transparent bg-clip-text">
               Tại sao chọn chúng tôi?
             </h2>
-            <p className="mt-4 max-w-2xl text-xl text-gray-500 lg:mx-auto">
+            <p className="mt-4 max-w-2xl text-xl text-gray-300 lg:mx-auto">
               Chúng tôi cam kết mang đến trải nghiệm mua sắm tuyệt vời nhất cho bạn
             </p>
           </div>
 
           <div className="mt-10">
             <div className="space-y-10 md:space-y-0 md:grid md:grid-cols-3 md:gap-x-8 md:gap-y-10">
-              {/* Feature 1 */}
-              <div className="relative">
+              {/* Feature boxes - update background and text colors */}
+              <div className="relative p-6 rounded-lg bg-gray-800/50 backdrop-blur-sm transition-transform hover:scale-105">
                 <div className="absolute flex items-center justify-center h-12 w-12 rounded-md bg-indigo-500 text-white">
                   <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
                   </svg>
                 </div>
-                <p className="ml-16 text-lg leading-6 font-medium text-gray-900">Giao hàng nhanh chóng</p>
-                <p className="mt-2 ml-16 text-base text-gray-500">
+                <p className="ml-16 text-lg leading-6 font-medium text-gray-200">Giao hàng nhanh chóng</p>
+                <p className="mt-2 ml-16 text-base text-gray-400">
                   Cam kết giao hàng trong vòng 24h đối với nội thành và 72h đối với các tỉnh thành khác
                 </p>
               </div>
 
-              {/* Feature 2 */}
-              <div className="relative">
+              <div className="relative p-6 rounded-lg bg-gray-800/50 backdrop-blur-sm transition-transform hover:scale-105">
                 <div className="absolute flex items-center justify-center h-12 w-12 rounded-md bg-indigo-500 text-white">
                   <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 6l3 1m0 0l-3 9a5.002 5.002 0 006.001 0M6 7l3 9M6 7l6-2m6 2l3-1m-3 1l-3 9a5.002 5.002 0 006.001 0M18 7l3 9m-3-9l-6-2m0-2v2m0 16V5m0 16H9m3 0h3" />
                   </svg>
                 </div>
-                <p className="ml-16 text-lg leading-6 font-medium text-gray-900">Giá cả cạnh tranh</p>
-                <p className="mt-2 ml-16 text-base text-gray-500">
+                <p className="ml-16 text-lg leading-6 font-medium text-gray-200">Giá cả cạnh tranh</p>
+                <p className="mt-2 ml-16 text-base text-gray-400">
                   Chúng tôi cam kết mang đến mức giá tốt nhất cho khách hàng với chính sách đối chiếu giá thị trường
                 </p>
               </div>
 
-              {/* Feature 3 */}
-              <div className="relative">
+              <div className="relative p-6 rounded-lg bg-gray-800/50 backdrop-blur-sm transition-transform hover:scale-105">
                 <div className="absolute flex items-center justify-center h-12 w-12 rounded-md bg-indigo-500 text-white">
                   <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
                   </svg>
                 </div>
-                <p className="ml-16 text-lg leading-6 font-medium text-gray-900">Chất lượng đảm bảo</p>
-                <p className="mt-2 ml-16 text-base text-gray-500">
+                <p className="ml-16 text-lg leading-6 font-medium text-gray-200">Chất lượng đảm bảo</p>
+                <p className="mt-2 ml-16 text-base text-gray-400">
                   Tất cả sản phẩm đều được kiểm định chất lượng nghiêm ngặt trước khi đến tay khách hàng
                 </p>
               </div>
@@ -76,15 +75,14 @@ export default function Home() {
         </div>
       </section>
 
-      {/* About Section */}
-      <section className="py-16 bg-gray-50">
+      <section className="py-16 relative z-10">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="lg:text-center mb-12">
-            <h2 className="text-3xl font-extrabold tracking-tight text-gray-900 sm:text-4xl">
+            <h2 className="text-3xl font-extrabold tracking-tight sm:text-4xl bg-gradient-to-r from-purple-300 via-pink-300 to-purple-300 text-transparent bg-clip-text">
               Về Chúng Tôi
             </h2>
           </div>
-          <div className="prose prose-lg mx-auto text-gray-500">
+          <div className="prose prose-lg mx-auto text-gray-300">
             <p>
               Được thành lập từ năm 2023, chúng tôi tự hào là một trong những đơn vị tiên phong trong lĩnh vực thương mại điện tử tại Việt Nam. 
               Với sứ mệnh mang đến trải nghiệm mua sắm trực tuyến tuyệt vời nhất cho người tiêu dùng Việt Nam, chúng tôi không ngừng đổi mới 
@@ -105,29 +103,29 @@ export default function Home() {
       </section>
 
       {/* Services Section */}
-      <section className="py-16 bg-white">
+      <section className="py-16 relative z-10">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="lg:text-center mb-12">
-            <h2 className="text-3xl font-extrabold tracking-tight text-gray-900 sm:text-4xl">
+            <h2 className="text-3xl font-extrabold tracking-tight sm:text-4xl bg-gradient-to-r from-purple-300 via-pink-300 to-purple-300 text-transparent bg-clip-text">
               Dịch Vụ Của Chúng Tôi
             </h2>
           </div>
           <div className="mt-10 grid grid-cols-1 gap-10 sm:grid-cols-2 lg:grid-cols-3">
-            <div className="bg-gray-50 p-6 rounded-lg">
-              <h3 className="text-xl font-bold text-gray-900 mb-4">Mua sắm trực tuyến 24/7</h3>
-              <p className="text-gray-500">
+            <div className="bg-gray-800/50 backdrop-blur-sm p-6 rounded-lg transition-transform hover:scale-105">
+              <h3 className="text-xl font-bold text-gray-200 mb-4">Mua sắm trực tuyến 24/7</h3>
+              <p className="text-gray-400">
                 Mua sắm mọi lúc, mọi nơi với giao diện thân thiện và dễ sử dụng. Thanh toán an toàn với nhiều phương thức đa dạng.
               </p>
             </div>
-            <div className="bg-gray-50 p-6 rounded-lg">
-              <h3 className="text-xl font-bold text-gray-900 mb-4">Dịch vụ khách hàng</h3>
-              <p className="text-gray-500">
+            <div className="bg-gray-800/50 backdrop-blur-sm p-6 rounded-lg transition-transform hover:scale-105">
+              <h3 className="text-xl font-bold text-gray-200 mb-4">Dịch vụ khách hàng</h3>
+              <p className="text-gray-400">
                 Đội ngũ tư vấn chuyên nghiệp, hỗ trợ 24/7 qua điện thoại, email và chat trực tuyến.
               </p>
             </div>
-            <div className="bg-gray-50 p-6 rounded-lg">
-              <h3 className="text-xl font-bold text-gray-900 mb-4">Chính sách đổi trả</h3>
-              <p className="text-gray-500">
+            <div className="bg-gray-800/50 backdrop-blur-sm p-6 rounded-lg transition-transform hover:scale-105">
+              <h3 className="text-xl font-bold text-gray-200 mb-4">Chính sách đổi trả</h3>
+              <p className="text-gray-400">
                 Đổi trả miễn phí trong vòng 30 ngày với các sản phẩm không vừa ý hoặc có lỗi từ nhà sản xuất.
               </p>
             </div>

@@ -14,7 +14,6 @@ export default function Navigation() {
     const dropdownRef = useRef(null);
 
     useEffect(() => {
-        // Kiểm tra trạng thái đăng nhập ban đầu và lấy tên người dùng
         const checkAuth = () => {
             const isAuth = authService.isAuthenticated();
             setIsLoggedIn(isAuth);
@@ -23,6 +22,8 @@ export default function Navigation() {
                 setUsername(user?.username || '');
             }
         };
+
+        console.log("is username: " + JSON.stringify(username));
 
         checkAuth();
 
@@ -44,7 +45,6 @@ export default function Navigation() {
 
         document.addEventListener('mousedown', handleClickOutside);
 
-        // Cleanup
         return () => {
             window.removeEventListener('auth_change', handleAuthChange);
             document.removeEventListener('mousedown', handleClickOutside);
@@ -147,7 +147,7 @@ export default function Navigation() {
                                     </svg>
                                 </button>
                                 {showDropdown && (
-                                    <div className="absolute right-0 mt-3 w-72 rounded-2xl overflow-hidden shadow-2xl transform transition-all duration-300 animate-fadeIn bg-gradient-to-br from-purple-900/95 to-violet-900/95 backdrop-blur-xl border border-white/10">
+                                    <div className="absolute right-0 mt-3 w-72 rounded-2xl overflow-hidden shadow-2xl transform transition-all duration-300 animate-fadeIn bg-gradient-to-br from-purple-900/95 to-violet-900/95 backdrop-blur-xl border border-white/10 z-[999]">
                                         <div className="divide-y divide-white/10">
                                             <div className="p-4">
                                                 <div className="flex items-center space-x-3">

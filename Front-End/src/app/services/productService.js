@@ -13,7 +13,6 @@ const axiosInstance = axios.create({
 export const getAllProducts = async () => {
   try {
     const response = await axiosInstance.get('/products');
-    console.log("data product", JSON.stringify(response.data));
     return response.data;
   } catch (error) {
     console.error('Error fetching products:', error);

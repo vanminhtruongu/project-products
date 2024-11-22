@@ -24,7 +24,7 @@ export default function ClientProducts({ initialProducts }) {
       
       <Link 
         href="/cart"
-        className="fixed top-24 right-8 z-50 bg-gradient-to-r from-purple-600 to-pink-600 text-white p-4 rounded-full shadow-lg hover:shadow-xl hover:scale-110 transition-all duration-300 flex items-center justify-center group"
+        className="fixed top-24 right-8 z-40 bg-gradient-to-r from-purple-600 to-pink-600 text-white p-4 rounded-full shadow-lg hover:shadow-xl hover:scale-110 transition-all duration-300 flex items-center justify-center group"
       >
         <svg 
           className="w-6 h-6 transform group-hover:rotate-12 transition-transform duration-300" 
