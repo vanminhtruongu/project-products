@@ -4,52 +4,47 @@ import { authService } from '~/app/services/authService';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { toast } from 'react-toastify';
-import { validateField, validatePasswordConfirmation } from '~/app/utils/inputValidation';
+import { useForm } from 'react-hook-form';
+
+const FORM_STYLES = {
+    input: "block w-full px-4 py-3 bg-white/20 border border-transparent rounded-lg text-white placeholder-gray-200 backdrop-blur-sm focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all duration-300 hover:bg-white/30",
+    errorAlert: "bg-red-100/80 backdrop-blur-sm border-l-4 border-red-500 text-red-700 p-4 rounded-lg shadow-md animate-shake"
+};
+
+const INITIAL_FORM_DATA = {
+    name: '',
+    email: '',
+    password: '',
+    password_confirmation: ''
+};
 
 export default function Register() {
     const router = useRouter();
-    const [formData, setFormData] = useState({
-        name: '',
-        email: '',
-        password: '',
-        password_confirmation: ''
-    });
     const [error, setError] = useState('');
+    
+    const { register, handleSubmit, watch, formState: { errors } } = useForm({
+        defaultValues: INITIAL_FORM_DATA,
+        mode: 'onSubmit'
+    });
 
-    const handleChange = (e) => {
-        setFormData({
-            ...formData,
-            [e.target.name]: e.target.value
-        });
-    };
+    // Lấy giá trị password để so sánh với password_confirmation
+    const password = watch('password');
+    console.log("mẹ mày khó hiểu quá: "+password);
 
-    const handleSubmit = async (e) => {
-        e.preventDefault();
-        
-        // Validate all fields
-        const validations = {
-            name: validateField('name', formData.name),
-            email: validateField('email', formData.email),
-            password: validateField('password', formData.password),
-            password_confirmation: validateField('password_confirmation', formData.password_confirmation)
-        };
-
-        // Check password confirmation
-        const passwordConfirmation = validatePasswordConfirmation(formData.password, formData.password_confirmation);
-        const hasErrors = Object.values(validations).some(v => !v.isValid) || !passwordConfirmation.isValid;
-        
-        if (hasErrors) {
-            const errorMessage = Object.values(validations).find(v => !v.isValid)?.error || passwordConfirmation.error;
-            toast.error(errorMessage);
-            return;
-        }
-
+    const onSubmit = async (data) => {
         try {
-            await authService.register(formData);
+            await authService.register(data);
             toast.success("Đăng ký thành công");
             router.push('/login');
         } catch (err) {
-            setError(err.message);
+            toast.error(err.message);
+        }
+    };
+
+    const onError = (errors) => {
+        const firstError = Object.values(errors)[0];
+        if (firstError) {
+            toast.error(firstError.message);
         }
     };
 
@@ -64,51 +59,65 @@ export default function Register() {
                 </div>
 
                 {error && (
-                    <div className="bg-red-100/80 backdrop-blur-sm border-l-4 border-red-500 text-red-700 p-4 rounded-lg shadow-md animate-shake" role="alert">
+                    <div className={FORM_STYLES.errorAlert} role="alert">
                         <span className="block sm:inline font-medium">{error}</span>
                     </div>
                 )}
 
-                <form className="mt-8 space-y-6 relative" onSubmit={handleSubmit}>
+                <form className="mt-8 space-y-6 relative" onSubmit={handleSubmit(onSubmit, onError)}>
                     <div className="space-y-4">
                         <div className="group">
                             <input
-                                name="name"
-                                type="text"
-                                className="block w-full px-4 py-3 bg-white/20 border border-transparent rounded-lg text-white placeholder-gray-200 backdrop-blur-sm focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all duration-300 hover:bg-white/30"
+                                {...register("name", {
+                                    required: "Họ tên là bắt buộc",
+                                    minLength: {
+                                        value: 2,
+                                        message: "Họ tên phải có ít nhất 2 ký tự"
+                                    }
+                                })}
+                                className={`${FORM_STYLES.input} ${errors.name ? 'border-red-500' : ''}`}
                                 placeholder="Họ tên"
-                                value={formData.name}
-                                onChange={handleChange}
+                                type="text"
                             />
                         </div>
                         <div className="group">
                             <input
-                                name="email"
-                                type="email"
-                                className="block w-full px-4 py-3 bg-white/20 border border-transparent rounded-lg text-white placeholder-gray-200 backdrop-blur-sm focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all duration-300 hover:bg-white/30"
+                                {...register("email", {
+                                    required: "Email là bắt buộc",
+                                    pattern: {
+                                        value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
+                                        message: "Email không hợp lệ"
+                                    }
+                                })}
+                                className={`${FORM_STYLES.input} ${errors.email ? 'border-red-500' : ''}`}
                                 placeholder="Email"
-                                value={formData.email}
-                                onChange={handleChange}
+                                type="email"
                             />
                         </div>
                         <div className="group">
                             <input
-                                name="password"
-                                type="password"
-                                className="block w-full px-4 py-3 bg-white/20 border border-transparent rounded-lg text-white placeholder-gray-200 backdrop-blur-sm focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all duration-300 hover:bg-white/30"
+                                {...register("password", {
+                                    required: "Mật khẩu là bắt buộc",
+                                    minLength: {
+                                        value: 6,
+                                        message: "Mật khẩu phải có ít nhất 6 ký tự"
+                                    }
+                                })}
+                                className={`${FORM_STYLES.input} ${errors.password ? 'border-red-500' : ''}`}
                                 placeholder="Mật khẩu"
-                                value={formData.password}
-                                onChange={handleChange}
+                                type="password"
                             />
                         </div>
                         <div className="group">
                             <input
-                                name="password_confirmation"
-                                type="password"
-                                className="block w-full px-4 py-3 bg-white/20 border border-transparent rounded-lg text-white placeholder-gray-200 backdrop-blur-sm focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all duration-300 hover:bg-white/30"
+                                {...register("password_confirmation", {
+                                    required: "Xác nhận mật khẩu là bắt buộc",
+                                    validate: value => 
+                                        value === password || "Mật khẩu xác nhận không khớp"
+                                })}
+                                className={`${FORM_STYLES.input} ${errors.password_confirmation ? 'border-red-500' : ''}`}
                                 placeholder="Xác nhận mật khẩu"
-                                value={formData.password_confirmation}
-                                onChange={handleChange}
+                                type="password"
                             />
                         </div>
                     </div>

@@ -5,11 +5,10 @@ import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { toast } from 'react-toastify';
+import { useForm } from 'react-hook-form';
 // Services
 import { authService } from '~/app/services/authService';
 import { rememberMeService } from '~/app/services/rememberMeService';
-import { useRef } from 'react';
-import { validateForm } from '~/app/utils/inputValidation';
 
 // Constants
 const FORM_STYLES = {
@@ -27,52 +26,52 @@ const INITIAL_CREDENTIALS = {
 
 export default function Login() {
     const router = useRouter();
-    const [credentials, setCredentials] = useState(INITIAL_CREDENTIALS);
     const [error, setError] = useState('');
-    const emailRef = useRef(null);
-    const passwordRef = useRef(null);   
+    
+    const { register, handleSubmit, setValue, watch, formState: { errors } } = useForm({
+        defaultValues: INITIAL_CREDENTIALS,
+        mode: 'onSubmit'
+    });
+
+    // Watch rememberMe value để xử lý
+    const rememberMe = watch('rememberMe');
 
     useEffect(() => {
         const storedCredentials = rememberMeService.getStoredCredentials();
-        if (storedCredentials) {// kiểm tra dữ liệu trên localStorage xem có dữ liệu không
-            setCredentials(storedCredentials);
+        if (storedCredentials) {
+            // Set giá trị cho form từ localStorage
+            setValue('email', storedCredentials.email);
+            setValue('password', storedCredentials.password);
+            setValue('rememberMe', storedCredentials.rememberMe);
         }   
-    }, []);
+    }, [setValue]);
 
-    const handleCredentialsChange = (e) => {
-        const { name, value, type, checked } = e.target;
-        const newValue = type === 'checkbox' ? checked : value;
-        const newCredentials = { ...credentials, [name]: newValue };
+    // Theo dõi thay đổi của các trường để cập nhật remember me
+    useEffect(() => {
+        const subscription = watch((value, { name, type }) => {
+            if (value.rememberMe) {
+                rememberMeService.saveCredentials(value);
+            } else if (name === 'rememberMe' && !value.rememberMe) {
+                rememberMeService.clearCredentials();
+            }
+        });
+        return () => subscription.unsubscribe();
+    }, [watch]);
 
-        setCredentials(newCredentials);
-        handleRememberMe(name, checked, newCredentials);
-    };
-
-    const handleRememberMe = (fieldName, isChecked, newCredentials) => {
-        if (fieldName === 'rememberMe') {  // kiểm tra xem có phải checkbox không
-            isChecked ? rememberMeService.saveCredentials(newCredentials) : rememberMeService.clearCredentials();
-        } else if (newCredentials.rememberMe) {
-            rememberMeService.updateCredentialsIfRemembered(newCredentials);
-        }
-    };
-
-    const handleSubmit = async (e) => {
-        e.preventDefault();
-        
-        // Validate form inputs
-        const validationResult = validateForm(credentials);
-        
-        if (!validationResult.isValid) {
-            toast.error(Object.values(validationResult.errors)[0])
-            return;
-        }
-
+    const onSubmit = async (data) => {
         try {   
-            await authService.login(credentials);
+            await authService.login(data);
             toast.success("Đăng nhập thành công");
             router.push('/');
         } catch (err) {
-            setError(err.message);
+            toast.error(err.message);
+        }
+    };
+
+    const onError = (errors) => {
+        const firstError = Object.values(errors)[0];
+        if (firstError) {
+            toast.error(firstError.message);
         }
     };
 
@@ -92,30 +91,34 @@ export default function Login() {
                     </div>
                 )}
 
-                <form className="mt-8 space-y-6 relative" onSubmit={handleSubmit}>
+                <form className="mt-8 space-y-6 relative" onSubmit={handleSubmit(onSubmit, onError)}>
                     <div className="space-y-4">
                         <div className="group">
                             <input
-                                ref={emailRef}
-                                name="email"
-                                type="email"
-                                // required
-                                className={FORM_STYLES.input}
+                                {...register("email", {
+                                    required: "Email là bắt buộc",
+                                    pattern: {
+                                        value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
+                                        message: "Email không hợp lệ"
+                                    }
+                                })}
+                                className={`${FORM_STYLES.input} ${errors.email ? 'border-red-500' : ''}`}
                                 placeholder="Email"
-                                value={credentials.email}
-                                onChange={handleCredentialsChange}
+                                type="email"
                             />
                         </div>
                         <div className="group">
                             <input
-                                ref={passwordRef}
-                                name="password"
-                                type="password"
-                                // required
-                                className={FORM_STYLES.input}
+                                {...register("password", {
+                                    required: "Mật khẩu là bắt buộc",
+                                    minLength: {
+                                        value: 6,
+                                        message: "Mật khẩu phải có ít nhất 6 ký tự"
+                                    }
+                                })}
+                                className={`${FORM_STYLES.input} ${errors.password ? 'border-red-500' : ''}`}
                                 placeholder="Mật khẩu"
-                                value={credentials.password}
-                                onChange={handleCredentialsChange}
+                                type="password"
                             />
                         </div>
                     </div>
@@ -123,10 +126,8 @@ export default function Login() {
                     <div className="flex items-center justify-between">
                         <div className="flex items-center">
                             <input
-                                name="rememberMe"
+                                {...register("rememberMe")}
                                 type="checkbox"
-                                checked={credentials.rememberMe}
-                                onChange={handleCredentialsChange}
                                 className="h-4 w-4 rounded border-gray-300 text-purple-600 focus:ring-purple-500 transition-all duration-300"
                             />
                             <label className="ml-2 block text-sm text-white">Ghi nhớ đăng nhập</label>
