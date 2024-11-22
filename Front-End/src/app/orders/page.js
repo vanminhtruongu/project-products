@@ -97,11 +97,12 @@ export default function Orders() {
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gray-50">
-        <div className="p-8 rounded-lg shadow-lg bg-white">
+      <div className="min-h-screen bg-[url('/images/pattern-bg.png')] bg-fixed bg-cover flex items-center justify-center">
+        <div className="fixed inset-0 bg-gradient-to-br from-gray-900/90 via-purple-900/30 to-pink-900/50 pointer-events-none"></div>
+        <div className="relative p-8 rounded-2xl bg-gray-800/40 backdrop-blur-xl border border-gray-700/50 shadow-xl">
           <div className="flex flex-col items-center">
-            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
-            <p className="mt-4 text-gray-600">Đang tải danh sách đơn hàng...</p>
+            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-purple-400"></div>
+            <p className="mt-4 text-gray-300">Đang tải danh sách đơn hàng...</p>
           </div>
         </div>
       </div>
@@ -109,57 +110,74 @@ export default function Orders() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 py-8">
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+    <div className="min-h-screen bg-[url('/images/pattern-bg.png')] bg-fixed bg-cover py-12 bg-gray-900">
+      <div className="fixed inset-0 bg-gradient-to-br from-gray-900/90 via-purple-900/30 to-pink-900/50 pointer-events-none"></div>
+      
+      <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative">
         <div className="max-w-6xl mx-auto">
           {/* Header */}
-          <div className="text-center mb-8">
-            <h1 className="text-3xl font-bold text-gray-900">Đơn hàng của tôi</h1>
-            <p className="mt-2 text-gray-600">
+          <div className="text-center mb-16 space-y-4">
+            <h1 className="text-4xl sm:text-5xl font-bold bg-gradient-to-r from-purple-300 via-pink-300 to-purple-300 text-transparent bg-clip-text animate-gradient drop-shadow-lg">
+              Đơn hàng của tôi
+            </h1>
+            <p className="text-xl bg-gradient-to-r from-gray-300 to-gray-400 text-transparent bg-clip-text">
               {orders.length} đơn hàng
             </p>
           </div>
 
           {orders.length === 0 ? (
-            <div className="bg-white rounded-lg shadow-lg p-8 text-center">
+            <div className="bg-gray-800/40 backdrop-blur-xl rounded-2xl shadow-xl border border-gray-700/50 p-8 text-center">
               <svg className="mx-auto h-12 w-12 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
               </svg>
-              <h3 className="mt-4 text-lg font-medium text-gray-900">Chưa có đơn hàng nào</h3>
-              <p className="mt-2 text-gray-500">Bạn chưa có đơn hàng nào. Hãy mua sắm ngay!</p>
+              <h3 className="mt-4 text-lg font-medium text-gray-300">Chưa có đơn hàng nào</h3>
+              <p className="mt-2 text-gray-400">Bạn chưa có đơn hàng nào. Hãy mua sắm ngay!</p>
               <button
                 onClick={() => router.push('/')}
-                className="mt-6 px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors"
+                className="mt-6 relative inline-flex items-center justify-center px-6 py-3 rounded-xl text-sm font-medium overflow-hidden group/btn"
               >
-                Mua sắm ngay
+                <div className="absolute inset-0 bg-gradient-to-r from-purple-600 to-pink-600 transition-all duration-300 group-hover/btn:opacity-90"></div>
+                <div className="absolute inset-0 bg-gradient-to-r from-purple-600 to-pink-600 opacity-0 group-hover/btn:opacity-100 blur-xl transition-all duration-300"></div>
+                <span className="relative text-white text-base group-hover/btn:text-white/90">Mua sắm ngay</span>
               </button>
             </div>
           ) : (
             <div className="space-y-6">
               {orders.map((order) => (
-                <div key={order.id} className="bg-white rounded-lg shadow-lg overflow-hidden">
-
-                  <div className="px-6 py-4 bg-gray-50 border-b border-gray-200">
+                <div key={order.id} className="bg-gray-800/40 backdrop-blur-xl rounded-2xl shadow-xl border border-gray-700/50 overflow-hidden group">
+                  {/* Order Header */}
+                  <div className="px-6 py-4 bg-gray-900/50 border-b border-gray-700/50">
                     <div className="flex items-center justify-between">
                       <div>
-                        <p className="text-sm text-gray-600">Mã đơn hàng</p>
-                        <p className="text-lg font-medium text-gray-900">#{order.id}</p>
+                        <p className="text-sm text-gray-400">Mã đơn hàng</p>
+                        <p className="text-lg font-medium bg-gradient-to-r from-purple-300 to-pink-300 text-transparent bg-clip-text">
+                          #{order.id}
+                        </p>
                       </div>
                       <div className="text-right">
-                        <p className="text-sm text-gray-600">Ngày đặt hàng</p>
-                        <p className="text-gray-900">{formatDate(order.created_at)}</p>
+                        <p className="text-sm text-gray-400">Ngày đặt hàng</p>
+                        <p className="text-gray-300">{formatDate(order.created_at)}</p>
                       </div>
                     </div>
                   </div>
 
+                  {/* Order Items */}
                   <div className="px-6 py-4">
                     <div className="space-y-4">
                       {order.order_items.map((item) => (
-                        <div key={item.id} className="flex items-center justify-between py-4 border-b border-gray-200 last:border-0">
-                          <img src={item.product.image_url} alt={item.product.name} className="w-20 h-16 object-cover rounded pr-[20px]" />
-                          <div className="flex-1">
-                            <h4 className="text-lg font-medium text-gray-900">{item.product.name}</h4>
-                            <p className="mt-1 text-sm text-gray-500">
+                        <div key={item.id} className="flex items-center space-x-4 py-4 border-b border-gray-700/50 last:border-0">
+                          <div className="relative w-20 h-16 overflow-hidden rounded-lg">
+                            <img 
+                              src={item.product.image_url} 
+                              alt={item.product.name} 
+                              className="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-500" 
+                            />
+                          </div>
+                          <div className="flex-1 min-w-0">
+                            <h4 className="text-lg font-medium bg-gradient-to-r from-purple-300 to-pink-300 text-transparent bg-clip-text truncate">
+                              {item.product.name}
+                            </h4>
+                            <p className="mt-1 text-sm text-gray-400">
                               Số lượng: {item.quantity} x {new Intl.NumberFormat('vi-VN', {
                                 style: 'currency',
                                 currency: 'VND'
@@ -167,7 +185,7 @@ export default function Orders() {
                             </p>
                           </div>
                           <div className="text-right">
-                            <p className="text-lg font-medium text-gray-900">
+                            <p className="text-lg font-medium bg-gradient-to-r from-purple-300 to-pink-300 text-transparent bg-clip-text">
                               {new Intl.NumberFormat('vi-VN', {
                                 style: 'currency',
                                 currency: 'VND'
@@ -180,19 +198,19 @@ export default function Orders() {
                   </div>
 
                   {/* Order Footer */}
-                  <div className="px-6 py-4 bg-gray-50 border-t border-gray-200">
-                    <div className="flex items-center justify-between">
-                      <div className="flex items-center space-x-4">
-                        <span className={`px-3 py-1 rounded-full text-sm font-medium ${getStatusColor(order.status)}`}>
+                  <div className="px-6 py-4 bg-gray-900/50 border-t border-gray-700/50">
+                    <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+                      <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4">
+                        <span className={`px-4 py-2 rounded-xl text-sm font-medium ${getStatusColor(order.status)} bg-opacity-15 backdrop-blur-sm`}>
                           {getStatusText(order.status)}
                         </span>
-                        <span className="text-sm text-gray-600">
+                        <span className="text-sm text-gray-400">
                           {getPaymentMethodText(order.payment_method)}
                         </span>
                       </div>
-                      <div>
-                        <p className="text-sm text-gray-600">Tổng tiền</p>
-                        <p className="text-xl font-bold text-blue-600">
+                      <div className="w-full sm:w-auto">
+                        <p className="text-sm text-gray-400">Tổng tiền</p>
+                        <p className="text-xl font-bold bg-gradient-to-r from-purple-300 to-pink-300 text-transparent bg-clip-text">
                           {new Intl.NumberFormat('vi-VN', {
                             style: 'currency',
                             currency: 'VND'

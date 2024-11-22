@@ -10,7 +10,6 @@ const axiosInstance = axios.create({
     'Accept': 'application/json',
   }
 });
-
 export const getAllProducts = async () => {
   try {
     const response = await axiosInstance.get('/products');
@@ -21,3 +20,4 @@ export const getAllProducts = async () => {
     return [];
   }
 }; 
+

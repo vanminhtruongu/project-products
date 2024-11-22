@@ -33,7 +33,7 @@ export default function RootLayout({ children }) {
           draggable           // Có thể keo toast
           pauseOnHover        // Tạm dừng khi hover vào
           theme="light"       // Chủ đề: light hoặc dark
-      />
+        />
       </body>
     </html>
   )

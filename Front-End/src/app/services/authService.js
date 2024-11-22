@@ -1,5 +1,6 @@
 import { toast } from "react-toastify";
 import axios from 'axios';
+import { rememberMeService } from '~/app/services/rememberMeService';
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000/api';
 
@@ -91,8 +92,13 @@ export const authService = {
                 withCredentials: true
             });
             
+            // Xóa cookies
             removeCookie('token');
             removeCookie('username');
+
+            // Xóa thông tin Remember me
+            rememberMeService.clearCredentials();
+
             window.dispatchEvent(new Event('auth_change'));
             toast.success("Đăng xuất thành công!");
         } catch (error) {
