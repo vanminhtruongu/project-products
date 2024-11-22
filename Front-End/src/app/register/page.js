@@ -29,7 +29,7 @@ export default function Register() {
 
     // Lấy giá trị password để so sánh với password_confirmation
     const password = watch('password');
-    console.log("mẹ mày khó hiểu quá: "+password);
+    console.log("mẹ mày khó hiểu quá: " + password);
 
     const onSubmit = async (data) => {
         try {
