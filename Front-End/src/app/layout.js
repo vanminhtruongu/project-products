@@ -23,16 +23,20 @@ export default function RootLayout({ children }) {
           <Toaster position="top-right" />
         </div>
         <ToastContainer 
-          position="top-right" // Vị trí của toast
-          autoClose={5000}     // Tự động đóng sau 5 giây
-          hideProgressBar={false} // Hiển thị thanh tiến trình
-          newestOnTop={false} // Toast mới xuất hiện ở trên cùng
-          closeOnClick        // Đóng toast khi click
-          rtl={false}         // Chế độ từ phải sang trái
-          pauseOnFocusLoss    // Tạm dừng khi tab bị mất focus
-          draggable           // Có thể keo toast
-          pauseOnHover        // Tạm dừng khi hover vào
-          theme="light"       // Chủ đề: light hoặc dark
+          position="top-right"
+          autoClose={5000}
+          hideProgressBar={false}
+          newestOnTop={false}
+          closeOnClick
+          rtl={false}
+          pauseOnFocusLoss
+          draggable
+          pauseOnHover
+          theme="dark"
+          limit={8}
+          toastClassName="!bg-gradient-to-br !from-purple-500 !via-pink-500 !to-red-500 !text-white !backdrop-blur-lg !rounded-xl !shadow-2xl"
+          progressClassName="!bg-gradient-to-r !from-purple-400 !via-pink-400 !to-red-400"
+          closeButton={false}
         />
       </body>
     </html>

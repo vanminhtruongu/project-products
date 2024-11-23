@@ -120,7 +120,7 @@ class CartController extends Controller
             return response()->json(['message' => 'Unauthorized'], 401);
         }
 
-        $cart = Cart::firstOrCreate(['user_id' => $user->id]);
+        $cart = Cart::firstOrCreate(['user_id' => $user->id]);  // tìm kiếm xem có người dùng id này trong cart không
 
         $cartItem = CartItem::updateOrCreate(
             [

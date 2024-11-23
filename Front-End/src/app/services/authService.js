@@ -70,6 +70,7 @@ export const authService = {
         try {
             const response = await axiosInstance.post('/login', credentials);
             const data = response.data;
+            console.log("data: "+JSON.stringify(data));
 
             if (data.access_token) {
                 setCookie('token', data.access_token);
