@@ -111,7 +111,7 @@ export default function MobileMenu({ isLoggedIn }) {
                         leaveFrom="opacity-100"
                         leaveTo="opacity-0"
                     >
-                        <Disclosure.Panel className="fixed inset-0 bg-black/50 backdrop-blur-sm lg:hidden z-40" />
+                        <Disclosure.Panel className="fixed inset-0 bg-black/50 backdrop-blur-sm lg:hidden z-40"/>
                     </Transition>
                 </>
             )}
